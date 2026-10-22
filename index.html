@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dinner Invitation - Priya Vyapari Bhaiyon</title>
+    <!-- Google Fonts for Professional & Elegant Look -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Playfair+Display:ital,wght@0,600;1,400&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti & Fireworks Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Background glow effect */
+        body::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.15) 0%, rgba(0,0,0,0) 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 480px;
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Envelope Styles */
+        .envelope-wrapper {
+            cursor: pointer;
+            transition: transform 0.4s ease;
+            filter: drop-shadow(0 15px 25px rgba(0,0,0,0.5));
+            animation: bounce 2s infinite;
+        }
+
+        .envelope-wrapper:hover {
+            transform: scale(1.05);
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .envelope {
+            position: relative;
+            width: 320px;
+            height: 220px;
+            background: #d4af37; /* Gold tone */
+            border-radius: 6px;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.2);
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 160px solid transparent;
+            border-right: 160px solid transparent;
+            border-top: 120px solid #b38f27;
+            transform-origin: top;
+            transition: transform 0.6s ease-in-out;
+            z-index: 3;
+        }
+
+        .envelope-pocket {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 160px solid #e6c65c;
+            border-right: 160px solid #e6c65c;
+            border-bottom: 110px solid #c9a227;
+            border-bottom-left-radius: 6px;
+            border-bottom-right-radius: 6px;
+            z-index: 2;
+        }
+
+        .envelope-label {
+            position: absolute;
+            top: 55%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 4;
+            color: #2b1f00;
+            font-family: 'Cinzel', serif;
+            font-weight: 800;
+            font-size: 1.1rem;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.4);
+            backdrop-filter: blur(5px);
+        }
+
+        /* Card Invitation Screen */
+        .card {
+            display: none;
+            background: rgba(20, 20, 35, 0.9);
+            border: 2px solid #d4af37;
+            border-radius: 16px;
+            padding: 35px 25px;
+            width: 100%;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.7), 0 0 30px rgba(212, 175, 55, 0.3);
+            animation: fadeIn 0.8s forwards;
+            position: relative;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.8) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .card h3 {
+            font-family: 'Cinzel', serif;
+            color: #f3e5ab;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .card h1 {
+            font-family: 'Cinzel', serif;
+            color: #ffd700;
+            font-size: 1.7rem;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 10px rgba(255, 215, 0, 0.4);
+        }
+
+        .card p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #e0e0e0;
+            margin-bottom: 20px;
+        }
+
+        /* Timing Emphasis Box */
+        .time-box {
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            color: #fff;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin: 15px 0;
+            box-shadow: 0 5px 15px rgba(255, 65, 108, 0.4);
+            border: 1px dashed #fff;
+            animation: pulseTime 1.5s infinite;
+        }
+
+        @keyframes pulseTime {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+
+        .venue-details {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #d4af37;
+            text-align: left;
+        }
+
+        .venue-details h4 {
+            color: #ffd700;
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .venue-details p {
+            font-size: 0.85rem;
+            margin-bottom: 0;
+            color: #ccc;
+        }
+
+        .map-btn {
+            display: inline-block;
+            background: #d4af37;
+            color: #1a1a1a;
+            padding: 10px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+            margin-bottom: 20px;
+        }
+
+        .map-btn:hover {
+            background: #ffd700;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.6);
+        }
+
+        .host-section {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1.1rem;
+            color: #f3e5ab;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 15px;
+        }
+
+        .host-section span {
+            font-family: 'Cinzel', serif;
+            font-style: normal;
+            font-weight: 800;
+            color: #ffd700;
+            display: block;
+            font-size: 1.2rem;
+            margin-top: 4px;
+        }
+
+        .click-hint {
+            margin-top: 15px;
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.5);
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Step 1: Closed Envelope -->
+        <div class="envelope-wrapper" id="envelopeWrapper" onclick="openEnvelope()">
+            <div class="envelope">
+                <div class="envelope-flap" id="envelopeFlap"></div>
+                <div class="envelope-pocket"></div>
+                <div class="envelope-label">Tap to Open<br>Invitation</div>
+            </div>
+        </div>
+
+        <!-- Step 2 & 3: Invitation Card -->
+        <div class="card" id="inviteCard" onclick="showVenueDetails()">
+            <div id="cardContentStage1">
+                <h3>DINNER INVITATION</h3>
+                <h1>Priya Vyapari Bhaiyon</h1>
+                <p>You are cordially invited for a delightful dinner gathering full of warmth, conversations, and celebrations!</p>
+                
+                <div class="time-box">
+                    📅 23rd October<br>⏰ 9:45 PM SHARP!
+                </div>
+                
+                <div class="click-hint">👇 Click anywhere on this card to view Venue & Host Details 👇</div>
+            </div>
+
+            <div id="cardContentStage2" style="display: none;">
+                <h3>YOU ARE INVITED</h3>
+                <h1>Priya Vyapari Bhaiyon</h1>
+                
+                <div class="venue-details">
+                    <h4>📍 Baawaraa Restro & Lounge</h4>
+                    <p>Delhi Road, Saharanpur, Uttar Pradesh</p>
+                </div>
+
+                <a href="https://maps.app.goo.gl/4vwz3fUJZUoWkKJW9?g_st=ac" target="_blank" class="map-btn">
+                    🗺️ Open Location Map
+                </a>
+
+                <div class="host-section">
+                    Cordially Invited By:
+                    <span>Kavi Miglani</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let clickStage = 0;
+
+        function openEnvelope() {
+            if (clickStage === 0) {
+                clickStage = 1;
+                
+                // Animate envelope flap open
+                document.getElementById('envelopeFlap').style.transform = 'rotateX(180deg)';
+                
+                // Trigger crackers/fireworks effect
+                launchFireworks();
+
+                // Hide envelope and show card after short delay
+                setTimeout(() => {
+                    document.getElementById('envelopeWrapper').style.display = 'none';
+                    document.getElementById('inviteCard').style.display = 'block';
+                }, 500);
+            }
+        }
+
+        function showVenueDetails() {
+            if (clickStage === 1) {
+                clickStage = 2;
+                
+                // Switch content inside the card
+                document.getElementById('cardContentStage1').style.display = 'none';
+                document.getElementById('cardContentStage2').style.display = 'block';
+                
+                // Trigger vibrant sparkling celebration effect again
+                launchVibrantSparkles();
+            }
+        }
+
+        function launchFireworks() {
+            var duration = 2.5 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 1000 };
+
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            var interval = setInterval(function() {
+                var timeLeft = animationEnd - Date.now();
+
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+
+                var particleCount = 50 * (timeLeft / duration);
+                confetti(Object.assign({}, defaults, { 
+                    particleCount, 
+                    origin: { x: randomInRange(0.1, 0.9), y: Math.random() - 0.2 },
+                    colors: ['#ffd700', '#ff416c', '#ff4b2b', '#00ffcc', '#ffffff']
+                }));
+            }, 250);
+        }
+
+        function launchVibrantSparkles() {
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#ffd700', '#ff416c', '#00ffff', '#ffffff']
+            });
+        }
+    </script>
+</body>
+</html>
+arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        function createFirework() {
+            if (!fireworksActive) return;
+            const x = Math.random() * canvas.width;
+            const y = Math.random() * (canvas.height * 0.6);
+            const colors = ['#ff4e50', '#f9d423', '#00f2fe', '#4facfe', '#ff0844', '#00ffcc', '#ff00ff'];
+            const mainColor = colors[Math.floor(Math.random() * colors.length)];
+            
+            for (let i = 0; i < 60; i++) {
+                particles.push(new Particle(x, y, mainColor, true));
+            }
+        }
+
+        function animateFireworks() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = particles.length - 1; i >= 0; i--) {
+                particles[i].update();
+                particles[i].draw();
+                if (particles[i].alpha <= 0) {
+                    particles.splice(i, 1);
+                }
+            }
+            requestAnimationFrame(animateFireworks);
+        }
+        animateFireworks();
+
+        function startFireworks() {
+            fireworksActive = true;
+            // Launch periodic fireworks
+            setInterval(() => {
+                if (fireworksActive) createFirework();
+            }, 600);
+        }
+
+        function boostFireworks() {
+            // Trigger multiple crackers simultaneously for grand venue reveal
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => createFirework(), i * 150);
+            }
+        }
+    </script>
+</body>
+</html>
